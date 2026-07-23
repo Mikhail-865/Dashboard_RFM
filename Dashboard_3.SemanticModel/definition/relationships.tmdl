@@ -1,0 +1,43 @@
+relationship a7a521b6-69c1-48d4-92dd-d7fed8d599e1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales data'.StockDate
+	toColumn: LocalDateTable_884963bb-e511-4762-80bc-efa1d65c547a.Date
+
+relationship ba287328-1167-4a9a-abc2-31854135e1f2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Customers.BirthDate
+	toColumn: LocalDateTable_9e9210f4-bff5-44f6-a226-27969893be86.Date
+
+relationship c462c886-e3d0-4a2c-bc42-dacf3463e6d5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CustomerOrderingParams.MaxPayDate
+	toColumn: LocalDateTable_165bb4d9-f3b0-4362-a4ea-0c2d3a5befa1.Date
+
+relationship AutoDetected_fd450a4e-49fe-4287-98dd-53f05fb0aa5d
+	fromColumn: 'Sales data'.ProductKey
+	toColumn: Product.ProductKey
+
+relationship f6fe80d3-fd9b-f4ba-9b51-16966919af6d
+	fromColumn: CustomerOrderingParams.RFM
+	toColumn: 'RFM cats'.Значение
+
+relationship e2955b5a-7949-4009-8f1d-ffe1d39265a3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendar.Date
+	toColumn: LocalDateTable_0d073f4e-d7fb-4089-a06d-9b98d3016e93.Date
+
+relationship 10313a15-f0d8-ab4f-87c8-906d35c10ebf
+	fromColumn: 'Sales data'.OrderDate
+	toColumn: Calendar.Date
+
+relationship 7117e960-6686-d55c-8fa7-681f26337175
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Sales data'.CustomerKey
+	toColumn: CustomerOrderingParams.CustomerKey
+
+relationship 91fc30ed-7469-714a-450a-87bead0c8bd0
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Customers.CustomerKey
+	toColumn: CustomerOrderingParams.CustomerKey
+

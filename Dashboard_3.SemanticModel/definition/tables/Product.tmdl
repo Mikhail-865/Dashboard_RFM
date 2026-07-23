@@ -1,0 +1,105 @@
+table Product
+	lineageTag: 4f1ee68c-3129-412c-8043-63dcdf33fdb7
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 0056a13b-a514-46f5-a73c-2c5f35f7f50e
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSubcategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: fe6bcf66-a000-4b09-b6c8-4922b7ef050c
+		summarizeBy: none
+		sourceColumn: ProductSubcategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSKU
+		dataType: string
+		lineageTag: c70ff380-cf4a-4884-bc10-933e9dcfb8e2
+		summarizeBy: none
+		sourceColumn: ProductSKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 478ab7c8-8ea6-4c52-8903-2617ea5d1068
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelName
+		dataType: string
+		lineageTag: 2c13c6ea-59d1-4b48-b4df-144d189eec73
+		summarizeBy: none
+		sourceColumn: ModelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductDescription
+		dataType: string
+		lineageTag: d37f1c6d-f093-4a1e-b858-42e6c9372514
+		summarizeBy: none
+		sourceColumn: ProductDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductColor
+		dataType: string
+		lineageTag: 4dc1a60d-ec9a-49b4-8857-d3c9f77477dd
+		summarizeBy: none
+		sourceColumn: ProductColor
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductSize
+		dataType: string
+		lineageTag: 4b5f9409-d8dc-49f6-b326-a43514344d4f
+		summarizeBy: none
+		sourceColumn: ProductSize
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductStyle
+		dataType: string
+		lineageTag: 3787eb4b-416c-4df9-aa44-9035c051b5db
+		summarizeBy: none
+		sourceColumn: ProductStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCost
+		dataType: string
+		lineageTag: 005f215c-c66b-4580-bfef-346380e160a0
+		summarizeBy: none
+		sourceColumn: ProductCost
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductPrice
+		dataType: string
+		lineageTag: 532508bd-fa13-493c-b7c0-e500faae1a34
+		summarizeBy: none
+		sourceColumn: ProductPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\User\OneDrive\Рабочий стол\Dashboard\data\Product.csv"),[Delimiter=",", Columns=11, Encoding=1251, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductKey", Int64.Type}, {"ProductSubcategoryKey", Int64.Type}, {"ProductSKU", type text}, {"ProductName", type text}, {"ModelName", type text}, {"ProductDescription", type text}, {"ProductColor", type text}, {"ProductSize", type text}, {"ProductStyle", type text}, {"ProductCost", type text}, {"ProductPrice", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

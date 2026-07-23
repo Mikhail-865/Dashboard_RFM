@@ -1,0 +1,94 @@
+table _Measures
+	lineageTag: 1728a147-4aad-4c4d-894a-ad3771b73d4f
+
+	measure Выручка = ```
+			
+			SUMX(
+			    'Sales Data', 'Sales Data'[OrderQuantity] * 
+			    RELATED('Product'[ProductPrice])
+			)
+			```
+		lineageTag: 38407523-2dea-4335-b74f-967e9df294bd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Кол-во клиентов' = COUNT(CustomerOrderingParams[CustomerKey])
+		formatString: 0
+		lineageTag: a3fa6804-e015-4ac5-88b0-4c762a8df571
+
+	measure 'Средний чкек' = AVERAGE('CustomerOrderingParams'[Amount])
+		lineageTag: 4b39c7c8-61b2-4727-969d-bbcaacac9238
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Доля "выгодных" клиентов' =
+			
+			VAR CountOfImportnatCustomers = CALCULATE([Кол-во клиентов], 'RFM cats'[Определение группы] = "Выгодные")
+			
+			VAR RESULT =
+			DIVIDE(CountOfImportnatCustomers, [Кол-во клиентов], 0)
+			RETURN RESULT
+		lineageTag: ea78faea-a3b7-4bf2-b625-73c90494eefd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Доля "выгодных" доход' = ```
+			
+			VAR AmountOfImportantCustomers = 
+			    CALCULATE([Выручка], 'RFM cats'[Определение группы] = "Выгодные")
+			
+			VAR RESULT =
+			    DIVIDE(AmountOfImportantCustomers,[Выручка], 0)
+			RETURN RESULT
+			```
+		lineageTag: a33021af-d186-4403-b115-87203aadf777
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Доля "VIP" клиентов' =
+			
+			VAR CountOfVIPCustomers = CALCULATE([Кол-во клиентов], 'RFM cats'[Определение группы] = "VIP")
+			
+			VAR RESULT = DIVIDE(CountOfVIPCustomers,[Кол-во клиентов],0)
+			RETURN RESULT
+		lineageTag: 00f3473d-3586-4efb-8f5c-2671bc4618f5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Доля "VIP" доход' =
+			
+			VAR AmountOfVIPCustomers = CALCULATE([Выручка], 'RFM cats'[Определение группы] = "VIP")
+			
+			VAR RESULT = DIVIDE(AmountOfVIPCustomers,[Выручка], 0)
+			RETURN RESULT
+		lineageTag: fa7a066e-5ec3-4179-b5f7-ee3305af816c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Measure = ```
+			
+			VAR FiltTable = 
+			                FILTER('Sales data',
+			                        AND(
+			                            'Sales data'[OrderDate] >= MIN('Calendar'[Date]),
+			                            'Sales data'[OrderDate] <= MAX('Calendar'[Date])
+			                        )
+			                )
+			VAR Col = SELECTCOLUMNS(FiltTable, "CustomerKey", [CustomerKey])
+			RETURN COUNTROWS(Col)
+			```
+		formatString: 0
+		lineageTag: d8b2715f-bbaf-4ebb-a442-b96eb638e2c5
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
